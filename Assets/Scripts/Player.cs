@@ -7,7 +7,9 @@ public class Player : MonoBehaviour {
 
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private GameInput gameInput;
-
+    
+    private float playerRadius = .7f;
+    private float playerHeight = 2f; 
     private bool isWalking;
 
 
@@ -15,8 +17,36 @@ public class Player : MonoBehaviour {
     {
 
         Vector2 inputVector = gameInput.GetMovementVectorNormalized();
+        
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y);
-        transform.position += moveDir * moveSpeed * Time.deltaTime;
+
+        float moveDistance = moveSpeed * Time.deltaTime;
+
+
+        if (!CanMove(moveDir, moveDistance))
+        {
+            Vector3 moveDirX = new Vector3(moveDir.x, 0, 0).normalized;
+            
+            if (CanMove(moveDirX,moveDistance))
+            {
+                moveDir = moveDirX;
+            }
+            else
+            {
+                Vector3 moveDirZ = new Vector3(0, 0, moveDir.z).normalized;
+                if (CanMove(moveDirZ, moveDistance))
+                {
+                    moveDir = moveDirZ;
+                }
+            }
+            
+        }
+        
+        if (CanMove(moveDir, moveDistance))
+        {
+            transform.position += moveDir * moveDistance;
+        }
+        
 
         isWalking = moveDir != Vector3.zero;
 
@@ -28,4 +58,8 @@ public class Player : MonoBehaviour {
         return isWalking;
     }
 
+    private bool CanMove(Vector3 moveDir, float moveDistance)
+    {
+        return !Physics.CapsuleCast(transform.position, transform.position+ Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
+    }
 }
