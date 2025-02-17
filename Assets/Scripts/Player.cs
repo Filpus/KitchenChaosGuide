@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class Player : MonoBehaviour
 {
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public float moveSpeed = 7f;
+    [SerializeField] private float moveSpeed = 7f;
     // Update is called once per frame
     private void Update()
     {
@@ -30,7 +30,9 @@ public class Player : MonoBehaviour
 
         inputVector = inputVector.normalized;
         Vector3 moveDir = new Vector3(inputVector.x, 0f, inputVector.y); 
-        transform.position += moveDir * Time.deltaTime;
+        transform.position += moveDir * (Time.deltaTime * moveSpeed);
+        float rotateSpeed = 10f;
+        transform.forward = Vector3.Slerp(transform.forward, moveDir, Time.deltaTime * rotateSpeed);
         Debug.Log(inputVector);
 
     }
