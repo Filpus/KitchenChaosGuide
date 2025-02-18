@@ -1,9 +1,20 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Player : MonoBehaviour {
+public class Player : MonoBehaviour
+{
 
+    public static Player Instance{ get; private set; }
+    public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+
+    public class OnSelectedCounterChangedEventArgs : EventArgs
+    {
+        public ClearCounter selectedCounter;
+    }
 
     [SerializeField] private float moveSpeed = 7f;
     [SerializeField] private GameInput gameInput;
@@ -12,11 +23,35 @@ public class Player : MonoBehaviour {
     private float playerHeight = 2f; 
     private bool isWalking;
     private Vector3 lastInteractDir;
+    private ClearCounter selectedCounter;
 
+    private void Awake()
+    {
+        if (Instance != null)
+        {
+            Debug.LogError("Jest wiele instacji gracza!");
+        }
+        Instance = this;
+    }
+
+    private void Start()
+    {
+        gameInput.OnInteractAction += GameInputOnOnInteractAction;
+
+
+    }
+    private void GameInputOnOnInteractAction(object sender, EventArgs e)
+    {
+        if (selectedCounter != null)
+        {
+            selectedCounter.Interact();
+        }
+    }
     private void Update()
     {
         HandleMovement();
         HandleInteractions();
+
     }
 
     private void HandleMovement()
@@ -74,9 +109,22 @@ public class Player : MonoBehaviour {
         {
             if (raycastHit.transform.TryGetComponent(out ClearCounter clearCounter))
             {
-                clearCounter.Interact();
+                if (clearCounter != selectedCounter)
+                {
+                    SetSelectedCounter(clearCounter);
+                }
+            }
+            else
+            {
+                SetSelectedCounter(null);
             }
         }
+        else
+        {
+            SetSelectedCounter(null);
+        }
+        
+        Debug.Log(selectedCounter);
 
     }
     public bool IsWalking() {
@@ -86,6 +134,16 @@ public class Player : MonoBehaviour {
     private bool CanMove(Vector3 moveDir, float moveDistance)
     {
         return !Physics.CapsuleCast(transform.position, transform.position+ Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
+    }
+
+    private void SetSelectedCounter([CanBeNull] ClearCounter selectedCounter)
+    {
+        this.selectedCounter = selectedCounter;
+                    
+        OnSelectedCounterChanged?.Invoke(this,new OnSelectedCounterChangedEventArgs
+        {
+            selectedCounter = this.selectedCounter
+        });
     }
     
     
