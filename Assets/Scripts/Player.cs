@@ -10,6 +10,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
 
     public static Player Instance{ get; private set; }
     public event EventHandler<OnSelectedCounterChangedEventArgs> OnSelectedCounterChanged;
+    
 
     public class OnSelectedCounterChangedEventArgs : EventArgs
     {
@@ -20,6 +21,8 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     [SerializeField] private GameInput gameInput;
     [SerializeField] private LayerMask countersLayerMask;
     [SerializeField] private Transform kitchenObjectHoldPoint;
+    
+    
     private float playerRadius = .7f;
     private float playerHeight = 2f; 
     private bool isWalking;
@@ -39,9 +42,18 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     private void Start()
     {
         gameInput.OnInteractAction += GameInputOnOnInteractAction;
-
+        gameInput.OnInteractAlternateAction += GameInputOnOnInteractAlternateAction;
 
     }
+
+    private void GameInputOnOnInteractAlternateAction(object sender, EventArgs e)
+    {
+        if (selectedCounter != null)
+        {
+            selectedCounter.InteractAlternate(this);
+        }
+    }
+
     private void GameInputOnOnInteractAction(object sender, EventArgs e)
     {
         if (selectedCounter != null)
@@ -135,7 +147,7 @@ public class Player : MonoBehaviour, IKitchenObjectParent
     
     private bool CanMove(Vector3 moveDir, float moveDistance)
     {
-        return !Physics.CapsuleCast(transform.position, transform.position+ Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
+        return moveDir != Vector3.zero && !Physics.CapsuleCast(transform.position, transform.position+ Vector3.up * playerHeight, playerRadius, moveDir, moveDistance);
     }
 
     private void SetSelectedCounter([CanBeNull] BaseCounter selectedCounter)
