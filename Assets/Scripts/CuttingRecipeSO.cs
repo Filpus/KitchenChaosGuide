@@ -1,16 +1,10 @@
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
-public class CuttingRecipeSO : MonoBehaviour
+[CreateAssetMenu()]
+public class CuttingRecipeSO : ScriptableObject
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public KitchenObjectSO input;
+    public KitchenObjectSO output;
+    public int cuttingProgressMax;
 }
