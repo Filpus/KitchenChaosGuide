@@ -104,6 +104,7 @@ GameObject:
   - component: {fileID: 6482878859756543116}
   - component: {fileID: 4974006227320671880}
   - component: {fileID: 3457233181147393124}
+  - component: {fileID: 3593292618644252659}
   m_Layer: 5
   m_Name: ProgressBarUI
   m_TagString: Untagged
@@ -207,8 +208,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1102d01bd923f3a4184551c46cba9152, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cuttingCounter: {fileID: 3469924544194449650}
+  hasProgressGameObject: {fileID: 4036928915407438251}
   barImage: {fileID: 3052972559369717404}
+--- !u!114 &3593292618644252659
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5989998491241968530}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcbd1d96f2e2c484088ac06407ae0782, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mode: 2
 --- !u!1 &6737976094998965865
 GameObject:
   m_ObjectHideFlags: 0
@@ -339,13 +353,34 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4589716710238282922, guid: d72bee846803d074784ffb8f64e993ca, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6003946962110849233}
   m_SourcePrefab: {fileID: 100100000, guid: d72bee846803d074784ffb8f64e993ca, type: 3}
 --- !u!4 &2927840019588476430 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4589716710238282923, guid: d72bee846803d074784ffb8f64e993ca, type: 3}
   m_PrefabInstance: {fileID: 1661887617132858021}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2927840019588476431 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4589716710238282922, guid: d72bee846803d074784ffb8f64e993ca, type: 3}
+  m_PrefabInstance: {fileID: 1661887617132858021}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6003946962110849233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2927840019588476431}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8ac246e0ee870f942bfe93bd2cdba43d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cuttingCounter: {fileID: 3469924544194449650}
 --- !u!1001 &7958642188668071854
 PrefabInstance:
   m_ObjectHideFlags: 0
