@@ -1,8 +1,18 @@
+using System;
 using UnityEngine;
 
 public class DeliveryCounter : BaseCounter
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public static DeliveryCounter Instance
+    {
+        get; private set; 
+    }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     public override void Interact(Player player)
     {
         if (player.HasKitchenObject())
