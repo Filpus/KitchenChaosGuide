@@ -1,12 +1,12 @@
 using System;
 using TMPro;
-using UnityEditor.Search;
 using UnityEngine;
-using UnityEngineInternal;
+using UnityEngine.Serialization;
 
-public class GameStartCountdownUI : MonoBehaviour
-{
-    [SerializeField] private TextMeshProUGUI countdownText;
+public class GameOverUI : MonoBehaviour
+
+{    
+    [SerializeField] private TextMeshProUGUI deliveredRecipesText;
 
     private void Start()
     {
@@ -15,9 +15,10 @@ public class GameStartCountdownUI : MonoBehaviour
 
     private void GameManagerOnOnStateChanged(object sender, EventArgs e)
     {
-        if (GameManager.Instance.IsCountdownToStartActive())
+        if (GameManager.Instance.IsGameOver())
         {
             Show();
+            deliveredRecipesText.text = DeliveryManager.Instance.GetDeliveredRecipes().ToString();
         }
         else
         {
@@ -28,7 +29,6 @@ public class GameStartCountdownUI : MonoBehaviour
     private void Update()
     {
 
-        countdownText.text = Math.Ceiling(GameManager.Instance.GetCountdownToStartTimer()).ToString();
     }
 
     private void Show()
