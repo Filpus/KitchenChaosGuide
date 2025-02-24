@@ -3,10 +3,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-
+    
+    
     public static GameManager Instance;
 
+    
     public event EventHandler OnStateChanged;
+    public event EventHandler OnGamePaused;
+    public event EventHandler OnGameUnpaused;
     private enum State
     {
         WaitingToSart,
@@ -18,9 +22,10 @@ public class GameManager : MonoBehaviour
 
     private State state;
     private float waitingToStartTimer = 1f;
-     float countdownToStartTimer = 3f;
-     float gamePlayingTimer = 10f;
-     float gamePlayingTimerMax = 10f;
+    private float countdownToStartTimer = 3f;
+    private float gamePlayingTimer = 10f;
+    private float gamePlayingTimerMax = 10f;
+    private bool isGamePause = false;
     
 
     private void Awake()
@@ -28,6 +33,16 @@ public class GameManager : MonoBehaviour
         state = State.WaitingToSart;
 
         Instance = this;
+    }
+
+    private void Start()
+    {
+        GameInput.Instance.OnPauseAction += InstanceOnOnPauseAction;
+    }
+
+    private void InstanceOnOnPauseAction(object sender, EventArgs e)
+    {
+        TogglePauseGame();
     }
 
     private void Update()
@@ -90,5 +105,20 @@ public class GameManager : MonoBehaviour
     public float GetGameTimerNormalized()
     {
         return gamePlayingTimer / gamePlayingTimerMax;
+    }
+
+    public void TogglePauseGame()
+    {
+        isGamePause = !isGamePause;
+        if (isGamePause)
+        {
+            Time.timeScale = 0f;
+            OnGamePaused?.Invoke(this, EventArgs.Empty);
+        }
+        else
+        {
+            Time.timeScale = 1f;
+            OnGameUnpaused?.Invoke(this,EventArgs.Empty);
+        }
     }
 }

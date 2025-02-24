@@ -5,19 +5,37 @@ using UnityEngine.InputSystem;
 public class GameInput : MonoBehaviour
 {
 
+    public static GameInput Instance { get; private set; }
+
     public event EventHandler OnInteractAction;
     public event EventHandler OnInteractAlternateAction;
+
+    public event EventHandler OnPauseAction;
     
     private PlayerInputActions playerInputActions;
+
     private void Awake()
     {
+        Instance = this;
+
         playerInputActions = new PlayerInputActions();
         playerInputActions.Player.Enable();
         playerInputActions.Player.Interact.performed += Interact_performed;
-        playerInputActions.Player.InteractAlternate.performed += InteractAlternateOnperformed;
+        playerInputActions.Player.InteractAlternate.performed += InteractAlternate_Performed;
+        playerInputActions.Player.Pause.performed += OnPause_Performed;
+
     }
 
-    private void InteractAlternateOnperformed(InputAction.CallbackContext obj)
+    private void OnDestroy()
+    {
+        playerInputActions.Player.Interact.performed -= Interact_performed;
+        playerInputActions.Player.InteractAlternate.performed -= InteractAlternate_Performed;
+        playerInputActions.Player.Pause.performed -= OnPause_Performed;
+        
+        playerInputActions.Dispose();
+    }
+
+    private void InteractAlternate_Performed(InputAction.CallbackContext obj)
     {
         OnInteractAlternateAction?.Invoke(this,EventArgs.Empty);
     }
@@ -26,6 +44,11 @@ public class GameInput : MonoBehaviour
     {
         OnInteractAction?.Invoke(this,EventArgs.Empty);
     }
+    private void OnPause_Performed(InputAction.CallbackContext obj)
+    {
+        OnPauseAction?.Invoke(this, EventArgs.Empty);
+    }
+
 
     public Vector2 GetMovementVectorNormalized()
     {
@@ -36,4 +59,6 @@ public class GameInput : MonoBehaviour
         inputVector = inputVector.normalized;
         return inputVector;
     }
+    
 }
+

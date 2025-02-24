@@ -7,6 +7,10 @@ public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     [SerializeField] protected Transform counterTopPoint;
     public static event EventHandler OnAnyObjectPlacedHear;
 
+    public static void ResetStaticData()
+    {
+        OnAnyObjectPlacedHear = null;
+    }
 
     protected KitchenObject kitchenObject;
 
