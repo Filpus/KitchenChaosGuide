@@ -11,6 +11,7 @@ public class GameOverUI : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.OnStateChanged += GameManagerOnOnStateChanged;
+        Hide();
     }
 
     private void GameManagerOnOnStateChanged(object sender, EventArgs e)
